@@ -1,6 +1,6 @@
 package server;
 
 public interface CacheManager {
-	public Solution getSolution();
-	public void saveSolution(Solution solution);
+	public String getSolution();//doesn't have to be generic
+	public void saveSolution(String solution);
 }

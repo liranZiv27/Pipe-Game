@@ -2,15 +2,14 @@ package server;
 
 public class GameCacheManager implements CacheManager {
 
-	private 
 	@Override
-	public Solution getSolution() {
+	public String getSolution() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void saveSolution(Solution solution) {
+	public void saveSolution(String solution) {
 		// TODO Auto-generated method stub
 		
 	}
