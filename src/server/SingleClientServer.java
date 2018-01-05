@@ -4,12 +4,12 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class OneClientServer implements Server {
+public class SingleClientServer implements Server {
 	private int port;
-	private ClientHandler ch;
+	private ClientHandler<?> ch;
 	private volatile boolean stop;
 	
-	public OneClientServer(int port, ClientHandler ch) {
+	public SingleClientServer(int port, ClientHandler<?> ch) {
 		this.port = port;
 		this.ch = ch;
 		stop=false;
@@ -40,6 +40,7 @@ public class OneClientServer implements Server {
 			aClient.getOutputStream().close();
 			aClient.close();
 			server.close();
+			this.stop();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
