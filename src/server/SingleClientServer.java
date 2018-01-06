@@ -17,30 +17,22 @@ public class SingleClientServer implements Server {
 	
 	@Override
 	public void start() throws Exception {
-		new Thread(()->{
-			try {
-				runServer();
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}).start();
+		runServer();
 	}
 
 	private void runServer() throws Exception {
 		ServerSocket server;
 		try {
 			server = new ServerSocket(port);
-			server.setSoTimeout(1000);
+			server.setSoTimeout(3000);
 			Socket aClient = server.accept(); 
 			
 			ch.handleClient(aClient.getInputStream(), aClient.getOutputStream());
 			
-			aClient.getInputStream().close();
-			aClient.getOutputStream().close();
+		//	aClient.getInputStream().close();
+		//	aClient.getOutputStream().close();
 			aClient.close();
 			server.close();
-			this.stop();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -4,7 +4,7 @@ public class MainTrain {
 
 	public static void main(String[] args) {
 		
-		SingleClientServer myServer = new SingleClientServer(6400, new StringSingleClientHandler(new GameCacheManager()));
+		SingleClientServer myServer = new SingleClientServer(6400, new StringSingleClientHandler(new GameCacheManager(), new StringSolver()));
 		try {
 			myServer.start();
 		} catch (Exception e) {
