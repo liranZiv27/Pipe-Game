@@ -66,9 +66,7 @@ public class GameCacheManager implements CacheManager<String> {
 		try
 		{
 		    writer = new BufferedWriter(new FileWriter(fname));
-	//	    File file = new File(fname);
 		    pWriter = new PrintWriter(workingDirectory + "\\src\\server\\" + fname +".txt");
-//		    file.createNewFile();
 		    for (String s : solution)
 		    {
 		    	if(!s.equals("done")) {
