@@ -1,10 +1,12 @@
 package server;
 
+import Solve.PipeSolver;
+
 public class MainTrain {
 
 	public static void main(String[] args) {
 		
-		SingleClientServer myServer = new SingleClientServer(6400, new StringSingleClientHandler(new GameCacheManager(), new StringSolver()));
+		SingleClientServer myServer = new SingleClientServer(6400, new StringSingleClientHandler(new GameCacheManager(), new PipeSolver()));
 		try {
 			myServer.start();
 		} catch (Exception e) {

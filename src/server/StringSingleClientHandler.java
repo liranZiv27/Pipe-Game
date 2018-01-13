@@ -10,12 +10,16 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import Solve.PipeSolution;
+import Solve.Solution;
+import Solve.Solver;
+
 public class StringSingleClientHandler extends SingleClientHandler<String>{
 	
 	CacheManager<String> cacheManager;
-	Solver<String> solver;
+	Solver<char[][],ArrayList<String>> solver;
 	
-	public StringSingleClientHandler(CacheManager<String> cacheManager, Solver<String> solver) {
+	public StringSingleClientHandler(CacheManager<String> cacheManager, Solver<char[][],ArrayList<String>> solver) {
 		this.cacheManager = cacheManager;
 		this.solver = solver;
 	}
@@ -24,7 +28,8 @@ public class StringSingleClientHandler extends SingleClientHandler<String>{
 	public void handleClient(InputStream inFromClient, OutputStream outToClient) {
 		String line;
 		StringBuilder stage = new StringBuilder();
-		Collection<String> problem = new ArrayList<String>();
+		ArrayList<String> problem = new ArrayList<String>();
+		Solution<ArrayList<String>> solution = new PipeSolution();
 		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inFromClient));
 		PrintWriter writer = new PrintWriter(new OutputStreamWriter(outToClient));
 		try {
@@ -36,8 +41,8 @@ public class StringSingleClientHandler extends SingleClientHandler<String>{
 			for (String s : problem)
 				stage.append(s);
 			if (cacheManager.doesSolutionExist(stage.toString()) == null) {
-				problem = solver.solveProblem(stage.toString());//problem is now the solution
-				cacheManager.saveSolution(stage.toString(), problem);
+			//	solution.setSolution(solver.solveProblem(stage));
+				cacheManager.saveSolution(stage.toString(), solution.getSolution());
 				}
 			for (String s : problem) {
 				writer.write(s);
