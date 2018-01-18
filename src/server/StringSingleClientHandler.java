@@ -10,9 +10,9 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import Solve.PipeSolution;
-import Solve.Solution;
-import Solve.Solver;
+import solve.PipeSolution;
+import solve.Solution;
+import solve.Solver;
 
 public class StringSingleClientHandler extends SingleClientHandler<String>{
 	

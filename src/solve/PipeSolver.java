@@ -1,12 +1,12 @@
-package Solve;
+package solve;
 
 import java.util.ArrayList;
 
-import Search.CommonSearcher;
-import Search.PipeGameSearchable;
-import Search.Searchable;
-import Search.Searcher;
-import Search.State;
+import search.CommonSearcher;
+import search.PipeGameSearchable;
+import search.Searchable;
+import search.Searcher;
+import search.State;
 
 public class PipeSolver implements Solver<char[][],ArrayList<String>> {
 

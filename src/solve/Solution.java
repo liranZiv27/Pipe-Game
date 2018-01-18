@@ -1,4 +1,4 @@
-package Solve;
+package solve;
 
 
 public interface Solution<T> {

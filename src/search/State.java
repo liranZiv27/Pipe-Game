@@ -1,12 +1,15 @@
-package Search;
+package search;
 
 public class State<T> {
 	private T state;
 	private double cost; // cost to reach this state
 	private State<T> cameFrom; // the state we came from to this state
 	
-	public State(T state) {
-		this.state = state;
+	public State() {
+
+	}
+	public State(T s ) {
+		this.state = s;
 	}
 	
 	public boolean equals(State<T> s) {
@@ -36,4 +39,7 @@ public class State<T> {
 	public void setCameFrom(State<T> cameFrom) {
 		this.cameFrom = cameFrom;
 	}
+
+
 }
+

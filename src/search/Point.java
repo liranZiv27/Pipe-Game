@@ -1,4 +1,4 @@
-package Search;
+package search;
 
 public class Point {
 
@@ -9,6 +9,10 @@ public class Point {
 	{
 		this.setX(x);
 		this.setY(y);
+	}
+
+	public Point() {
+		// TODO Auto-generated constructor stub
 	}
 
 	public int getX() {

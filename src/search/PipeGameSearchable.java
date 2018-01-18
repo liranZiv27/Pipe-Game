@@ -1,15 +1,20 @@
-package Search;
+package search;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class PipeGameSearchable implements Searchable<char[][]> {
 	public final State<char[][]> initialState;
 	public PipeParser parser;
 	public static int costForState;
+	public ArrayList<State<char[][]>> possibleStates;
+	public HashSet<String> hashStates;
 	
 	public PipeGameSearchable(State<ArrayList<String>> problem) {
 		this.parser = new PipeParser();
 		this.initialState = this.parser.parse(problem);
+		this.possibleStates = new ArrayList<>();
+		this.hashStates = new HashSet<>(); 
 	}
 
 	@Override
@@ -111,14 +116,54 @@ public class PipeGameSearchable implements Searchable<char[][]> {
 		return found;
 		
 	}
+
 	
+	@Override
+	public void setAllPossibleStates(State<char[][]> s) {
+		State<char [][]> newState;
+		for(int i=0;i<s.getState().length;i++)
+		{
+			for (int j=0;j<s.getState()[i].length;j++)
+			{
+				if (isLegal(s.getState()[i][j])) // check if the char is a pipe , s or g are not a pipe 
+				{
+					newState = new State<char[][]>();
+					newState = copyState(s); // copy the stage
+					newState.getState()[i][j] =	rotate( s.getState()[i][j]); // rotate the pipe	
+					StringBuilder stateBuilder = new StringBuilder();
+					for(int n=0; n<newState.getState().length; n++)
+						for(int m=0; m<newState.getState()[i].length; m++)
+							stateBuilder.append(newState.getState()[n][m]);//parse the stage into a string
+					if (!hashStates.contains(stateBuilder.toString()))
+					{
+						this.hashStates.add(stateBuilder.toString());//put the stage into the state hash set
+						this.possibleStates.add(newState);
+						newState.setCameFrom(s);
+						
+					}
+				}
+			}
+		}
+	}
 	
 	@Override
 	public ArrayList<State<char[][]>> getAllPossibleStates(State<char[][]> s) {
-		// TODO Auto-generated method stub
-		return null;
+		setAllPossibleStates(s);
+		return this.possibleStates;
 	}
-	
+
+	public State<char [][]> copyState(State<char [][]> s)
+	{
+		State<char [][]> newState = new State<>();
+		char [][] temp = new char[s.getState().length][s.getState()[0].length];
+		for (int i=0;i<s.getState().length;i++)
+		{
+			for(int j=0;j<s.getState()[i].length;j++)
+				temp[i][j] = s.getState()[i][j];		
+		}
+		newState.setState(temp);
+		return newState;
+	}
 
  	public boolean isLegal(char value) {
 		switch (value) {
@@ -325,17 +370,11 @@ public class PipeGameSearchable implements Searchable<char[][]> {
 			}
 		}
 		return new Point(-1,-1);
-	}
-	
-	
-	
+		}
 
-//
-//	public boolean isInRange(Point point ,char[][] board)
-//	{
-//		if (point.getX() < board.length && point >= 0)
-//			if(point[1] < board[0].length && point[1] >=0)
-//				return true;
-//		return false;		
-//	}
-}
+
+
+	
+	
+	
+} 

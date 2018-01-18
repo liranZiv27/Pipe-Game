@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
+import search.State;
+
 
 public class GameCacheManager implements CacheManager<String> {
 	
@@ -42,8 +44,9 @@ public class GameCacheManager implements CacheManager<String> {
 			}
         	try {
         		
-				while ((line = reader.readLine()) != null) {
-						tempList.add(line);}
+				while ((line  = reader.readLine()) != null) {
+						if (! (line.equals("done")))
+							tempList.add(line);}
 				reader.close();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -70,7 +73,8 @@ public class GameCacheManager implements CacheManager<String> {
 		    for (String s : solution)
 		    {
 		    	if(!s.equals("done")) {
-		    		writer.write(s);
+		    	//	writer.write(s);
+		    		//pWriter.println(s);
 		    		pWriter.println(s);
 		    		}
 		    	else
@@ -78,6 +82,7 @@ public class GameCacheManager implements CacheManager<String> {
 		    }
 		    writer.close();
 		    pWriter.close();
+		    
 		}
 		catch (IOException e)
 		{
@@ -92,11 +97,20 @@ public class GameCacheManager implements CacheManager<String> {
 		if (cache.containsKey(hash)) {
 			return cache.get(hash);
 		}
-		else
-		{
-			if (this.loadSolution(problem))
-				return cache.get(hash);
-			}
+		
+		// load
+//		else
+//		{
+//			if (this.loadSolution(problem))
+//				return cache.get(hash);
+//		}
+		
+		// save 
+		ArrayList<String> soulion = new ArrayList<>();
+		soulion.add("1,2,3");
+		soulion.add("1,2,3");
+		soulion.add("1,2,3");
+		saveSolution(problem, soulion);
 		return null;
 		}
 }
