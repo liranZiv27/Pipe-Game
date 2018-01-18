@@ -1,10 +1,10 @@
 package search;
 
-import java.util.ArrayList;
+import solve.Solution;
 
 
 public interface Searcher<T> {
-	public ArrayList<T> search(Searchable<T> searchable);
+	public Solution<T> search(Searchable<T> searchable);
 
 	public int getNumberOfNodesEvaluated();
 }

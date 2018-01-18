@@ -372,7 +372,10 @@ public class PipeGameSearchable implements Searchable<char[][]> {
 		return new Point(-1,-1);
 		}
 
-
+	@Override
+	public double increaseCost() {
+		return 1;
+	}
 
 	
 	

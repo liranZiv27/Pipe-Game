@@ -29,7 +29,7 @@ public class StringSingleClientHandler extends SingleClientHandler<String>{
 		String line;
 		StringBuilder stage = new StringBuilder();
 		ArrayList<String> problem = new ArrayList<String>();
-		Solution<ArrayList<String>> solution = new PipeSolution();
+		Solution<ArrayList<String>> solution = new Solution<ArrayList<String>>();
 		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inFromClient));
 		PrintWriter writer = new PrintWriter(new OutputStreamWriter(outToClient));
 		try {

@@ -7,4 +7,5 @@ public interface Searchable<T> {
 	public boolean isGoalState(State<T> s);
 	public ArrayList<State<T>> getAllPossibleStates(State<T> s);
 	public void setAllPossibleStates(State<T> s);
+	public double increaseCost();
 }
