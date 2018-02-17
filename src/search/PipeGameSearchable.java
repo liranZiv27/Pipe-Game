@@ -10,9 +10,10 @@ public class PipeGameSearchable implements Searchable<char[][]> {
 	public ArrayList<State<char[][]>> possibleStates;
 	public HashSet<String> hashStates;
 	
-	public PipeGameSearchable(State<ArrayList<String>> problem) {
+	public PipeGameSearchable(State<char[][]> problem) {
 		this.parser = new PipeParser();
-		this.initialState = this.parser.parse(problem);
+		//this.initialState = this.parser.parse(problem);
+		this.initialState = problem;
 		this.possibleStates = new ArrayList<>();
 		this.hashStates = new HashSet<>(); 
 	}
@@ -57,7 +58,7 @@ public class PipeGameSearchable implements Searchable<char[][]> {
 			if (checkRight(board[row][col]) && isLeft(board[row][col+1]) && (cameFrom.getY() != col+1)) // right
 				found = isGoalStateRecursion(board, new Point(row, col), row, col+1);
 		}
-		else if (row == board.length-1 && col == 0) // in case its bottom right corner
+		else if (row == board.length-1 && col == board[0].length-1) // in case its bottom right corner
 		{
 			if (checkUp(board[row][col]) && isDown(board[row-1][col]) && (cameFrom.getX() != row-1)) // up 
 				found = isGoalStateRecursion(board, new Point(row, col), row-1 , col);
@@ -83,7 +84,7 @@ public class PipeGameSearchable implements Searchable<char[][]> {
 			if (checkLeft(board[row][col]) && isRight(board[row][col-1]) && (cameFrom.getY() != col-1)) // left
 				found = isGoalStateRecursion(board, new Point(row, col), row, col-1);
 		}
-		else if (row == 0) // in case its the upper column and not a corner
+		else if (row == 0) // in case its the upper row and not a corner
 		{
 			if (checkRight(board[row][col]) && isLeft(board[row][col+1]) && (cameFrom.getY() != col+1)) // right
 				found = isGoalStateRecursion(board, new Point(row, col), row, col+1);
@@ -92,7 +93,7 @@ public class PipeGameSearchable implements Searchable<char[][]> {
 			if (checkDown(board[row][col]) && isUp(board[row+1][col]) && (cameFrom.getX() != row+1)) // down
 				found = isGoalStateRecursion(board, new Point(row, col), row+1, col);
 		}
-		else if (row == board.length-1) // in case its the bottom column and not a corner
+		else if (row == board.length-1) // in case its the bottom row and not a corner
 		{
 			if (checkRight(board[row][col]) && isLeft(board[row][col+1]) && (cameFrom.getY() != col+1)) // right
 				found = isGoalStateRecursion(board, new Point(row, col), row, col+1);
@@ -121,15 +122,23 @@ public class PipeGameSearchable implements Searchable<char[][]> {
 	@Override
 	public void setAllPossibleStates(State<char[][]> s) {
 		State<char [][]> newState;
+		State<char [][]> temp = new State<char[][]>(s);
 		for(int i=0;i<s.getState().length;i++)
 		{
 			for (int j=0;j<s.getState()[i].length;j++)
 			{
 				if (isLegal(s.getState()[i][j])) // check if the char is a pipe , s or g are not a pipe 
 				{
+				
 					newState = new State<char[][]>();
-					newState = copyState(s); // copy the stage
-					newState.getState()[i][j] =	rotate( s.getState()[i][j]); // rotate the pipe	
+					newState = copyState(temp); // copy the stage
+					newState.getState()[i][j] =	rotate(newState.getState()[i][j]); // rotate the pipe	
+					if(newState.getCameFrom() != null) {
+						newState.setCameFrom(s);
+						newState.setCost(newState.getCameFrom().getCost()+1);
+						
+						}
+					temp = copyState(newState);
 					StringBuilder stateBuilder = new StringBuilder();
 					for(int n=0; n<newState.getState().length; n++)
 						for(int m=0; m<newState.getState()[i].length; m++)
@@ -137,9 +146,7 @@ public class PipeGameSearchable implements Searchable<char[][]> {
 					if (!hashStates.contains(stateBuilder.toString()))
 					{
 						this.hashStates.add(stateBuilder.toString());//put the stage into the state hash set
-						this.possibleStates.add(newState);
-						newState.setCameFrom(s);
-						
+						this.possibleStates.add(newState);						
 					}
 				}
 			}
@@ -159,7 +166,9 @@ public class PipeGameSearchable implements Searchable<char[][]> {
 		for (int i=0;i<s.getState().length;i++)
 		{
 			for(int j=0;j<s.getState()[i].length;j++)
+			{
 				temp[i][j] = s.getState()[i][j];		
+			}
 		}
 		newState.setState(temp);
 		return newState;

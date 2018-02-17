@@ -12,8 +12,8 @@ public class PipeSolver implements Solver<char[][],ArrayList<String>> {
 
 	@Override
 	public Solution<char[][]> solveProblem(ArrayList<String> problem) {
-		// TODO Auto-generated method stub
 		return null;
+		
 	}
 
 //	@Override

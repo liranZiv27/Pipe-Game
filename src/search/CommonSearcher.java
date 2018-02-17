@@ -1,6 +1,7 @@
 package search;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.PriorityQueue;
 
@@ -14,7 +15,13 @@ public abstract class CommonSearcher<T> implements Searcher<T>{
 	private int evaluatedNodes;
 	
 	public CommonSearcher() {
-	openList=new PriorityQueue<State<T>>();
+	openList=new PriorityQueue<State<T>>(new Comparator<State<T>>()	{
+		@Override
+		public int compare(State<T> s1, State<T> s2) {
+			return (int)((s1.getCost() - s2.getCost()));
+		}
+	});
+
 	evaluatedNodes=0;
 	}
 	
@@ -24,14 +31,14 @@ public abstract class CommonSearcher<T> implements Searcher<T>{
 	}
 
 	protected void addToOpenList(State<T> state) {
-		openList.add(state);
+		this.openList.add(state);
 	}
 	
 	protected Solution<T> backTrace (State<T> initialState, State<T> goalState)
 	{
 		Solution<T> solution = new Solution<>();
-		State<T> temp = goalState;
-		while(temp.getCameFrom() != initialState) {
+		State<T> temp = new State<T>(goalState);
+		while(!temp.equals(initialState)) {
 			solution.add(temp);
 			temp = temp.getCameFrom();
 		}
