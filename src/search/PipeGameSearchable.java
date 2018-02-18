@@ -136,8 +136,8 @@ public class PipeGameSearchable implements Searchable<char[][]> {
 						newState = copyState(temp); // copy the stage
 						newState.getState()[i][j] =	rotate(newState.getState()[i][j]); // rotate the pipe	
 						//if(newState.getCameFrom() != null) {
-						newState.setCameFrom(temp);
-						newState.setCost(newState.getCameFrom().getCost()+1);
+						newState.setCameFrom(s);
+						//newState.setCost(this.setCostForState(newState));
 
 						//	}
 
@@ -149,11 +149,18 @@ public class PipeGameSearchable implements Searchable<char[][]> {
 						{
 							this.hashStates.add(stateBuilder.toString());//put the stage into the state hash set
 							this.possibleStates.add(newState);
-							System.out.println("1/n");
+							for(int q=0;q<newState.getState().length;q++)
+							{
+								
+								System.out.print(newState.getState()[q]);
+								System.out.print(" ");
+
+							}
+							System.out.println();
 						}
 						temp = copyState(newState);
 					}
-				
+					temp = copyState(s);
 				}
 			}
 		}
@@ -395,6 +402,7 @@ public class PipeGameSearchable implements Searchable<char[][]> {
 
 
 	public int checkAllpossibilities(char pipe)
+
 	{
 		if (pipe == 'L' || pipe == 'F' || pipe == '7' || pipe == 'J')
 			return 3;
@@ -404,4 +412,183 @@ public class PipeGameSearchable implements Searchable<char[][]> {
 			return 0;
 	}
 
+/*	public double setCostForState(State<char[][]> state) {
+		if ((board[row][col] == 's') || (check right))
+			return 1;
+		if (row == 0 && col == 0) //in case its the upper left corner 
+		{
+			if (checkRight(board[row][col]) && isLeft(board[row][col+1]) && (cameFrom.getY() != col+1)) // right 
+				found = isGoalStateRecursion(board, new Point(row, col), row , col+1);
+			if (checkDown(board[row][col]) && isUp(board[row+1][col]) && (cameFrom.getX() != row+1)) // down 
+				found = isGoalStateRecursion(board, new Point(row, col), row+1, col);
+		}
+		else if (row == 0 && col == board[0].length-1) // in case its upper right corner
+		{
+			if (checkLeft(board[row][col]) && isRight(board[row][col-1]) && (cameFrom.getY() != col-1)) // left 
+				found = isGoalStateRecursion(board, new Point(row, col), row , col-1);
+			if (checkDown(board[row][col]) && isUp(board[row+1][col])&&(cameFrom.getX() != row+1)) // down
+				found = isGoalStateRecursion(board, new Point(row, col), row+1, col);
+		}
+		else if (row == board.length-1 && col == 0) // in case its bottom left corner
+		{
+			if (checkUp(board[row][col]) && isDown(board[row-1][col])&& (cameFrom.getX() != row-1)) // up 
+				found = isGoalStateRecursion(board, new Point(row, col), row-1 , col);
+			if (checkRight(board[row][col]) && isLeft(board[row][col+1]) && (cameFrom.getY() != col+1)) // right
+				found = isGoalStateRecursion(board, new Point(row, col), row, col+1);
+		}
+		else if (row == board.length-1 && col == board[0].length-1) // in case its bottom right corner
+		{
+			if (checkUp(board[row][col]) && isDown(board[row-1][col]) && (cameFrom.getX() != row-1)) // up 
+				found = isGoalStateRecursion(board, new Point(row, col), row-1 , col);
+			if (checkLeft(board[row][col]) && isRight(board[row][col-1])&& (cameFrom.getY() != col-1)) // left
+				found = isGoalStateRecursion(board, new Point(row, col), row, col-1);
+		}
+
+		else if (col ==0)// in case its the left column and not a corner
+		{
+			if (checkUp(board[row][col]) && isDown(board[row-1][col]) && (cameFrom.getX() != row-1)) // up 
+				found = isGoalStateRecursion(board, new Point(row, col), row-1 , col);
+			if (checkDown(board[row][col]) && isUp(board[row+1][col]) && (cameFrom.getX() != row+1)) // down
+				found = isGoalStateRecursion(board, new Point(row, col), row+1, col);
+			if (checkRight(board[row][col]) && isLeft(board[row][col+1]) && (cameFrom.getY() != col+1)) // right
+				found = isGoalStateRecursion(board, new Point(row, col), row, col+1);
+		}
+		else if (col == board[0].length-1) // in case its the right column and not a corner
+		{
+			if (checkUp(board[row][col]) && isDown(board[row-1][col]) && (cameFrom.getX() != row-1)) // up 
+				found = isGoalStateRecursion(board, new Point(row, col), row-1 , col);
+			if (checkDown(board[row][col]) && isUp(board[row+1][col]) && (cameFrom.getX() != row+1)) // down
+				found = isGoalStateRecursion(board, new Point(row, col), row+1, col);
+			if (checkLeft(board[row][col]) && isRight(board[row][col-1]) && (cameFrom.getY() != col-1)) // left
+				found = isGoalStateRecursion(board, new Point(row, col), row, col-1);
+		}
+		else if (row == 0) // in case its the upper row and not a corner
+		{
+			if (checkRight(board[row][col]) && isLeft(board[row][col+1]) && (cameFrom.getY() != col+1)) // right
+				found = isGoalStateRecursion(board, new Point(row, col), row, col+1);
+			if (checkLeft(board[row][col]) && isRight(board[row][col-1]) && (cameFrom.getY() != col-1)) // left
+				found = isGoalStateRecursion(board, new Point(row, col), row, col-1);
+			if (checkDown(board[row][col]) && isUp(board[row+1][col]) && (cameFrom.getX() != row+1)) // down
+				found = isGoalStateRecursion(board, new Point(row, col), row+1, col);
+		}
+		else if (row == board.length-1) // in case its the bottom row and not a corner
+		{
+			if (checkRight(board[row][col]) && isLeft(board[row][col+1]) && (cameFrom.getY() != col+1)) // right
+				found = isGoalStateRecursion(board, new Point(row, col), row, col+1);
+			if (checkLeft(board[row][col]) && isRight(board[row][col-1]) && (cameFrom.getY() != col-1)) // left
+				found = isGoalStateRecursion(board, new Point(row, col), row, col-1);
+			if (checkUp(board[row][col]) && isDown(board[row-1][col]) && (cameFrom.getX() != row-1)) // up 
+				found = isGoalStateRecursion(board, new Point(row, col), row-1 , col);
+		}
+		else // all the other options
+		{
+			if (checkRight(board[row][col]) && isLeft(board[row][col+1]) && (cameFrom.getY() != col+1)) // right
+				found = isGoalStateRecursion(board, new Point(row, col), row, col+1);
+			if (checkLeft(board[row][col]) && isRight(board[row][col-1]) && (cameFrom.getY() != col-1)) // left
+				found = isGoalStateRecursion(board, new Point(row, col), row, col-1);
+			if (checkUp(board[row][col]) && isDown(board[row-1][col]) && (cameFrom.getX() != row-1)) // up 
+				found = isGoalStateRecursion(board, new Point(row, col), row-1 , col);
+			if (checkDown(board[row][col]) && isUp(board[row+1][col]) && (cameFrom.getX() != row+1)) // down
+				found = isGoalStateRecursion(board, new Point(row, col), row+1, col);
+		}
+
+		return found;
+		int i,j;
+		
+		char pipe = 'i';
+		char[][] board = state.getState();
+		Point p;
+		double cost = 0;
+		p = endPos(board);
+		pipe = board[p.getX()][p.getY()];
+		i = p.getX();
+		j = p.getY();
+		while(i != -1 && j != -1 && i < board.length && j < board[0].length) {
+				switch(pipe) {
+				case 'J':
+					if (isDown(board[i-1][j])) {
+						pipe = board[i-1][j];
+						cost++;
+						i--;}
+					if (isRight(board[i][j-1])) {
+						pipe = board[i][j-1];
+						cost++;
+						j--;}
+					;
+				case 'F':
+					if (isUp(board[i+1][j])) {
+						pipe = board[i+1][j];
+						cost++;
+						i++;}
+					if (isLeft(board[i][j+1])) {
+						pipe = board[i][j+1];
+						cost++;
+						j++;}
+					;
+				case '7':
+					if (isUp(board[i+1][j])) {
+						pipe = board[i+1][j];
+						cost++;
+						i++;}
+					if (isRight(board[i][j-1])) {
+						pipe = board[i][j-1];
+						cost++;
+						j--;}
+					;
+				case 'L':
+					if (isDown(board[i-1][j])) {
+						pipe = board[i-1][j];
+						cost++;
+						i--;}
+					if (isLeft(board[i][j+1])) {
+						pipe = board[i][j+1];
+						cost++;
+						j++;}
+					;
+				case '-':
+					if (isLeft(board[i][j+1])) {
+						pipe = board[i][j+1];
+						cost++;
+						j++;}
+					if (isRight(board[i][j-1])) {
+						pipe = board[i][j-1];
+						cost++;
+						j--;}
+					;
+				case '|':
+					if (isUp(board[i+1][j])) {
+						pipe = board[i+1][j];
+						cost++;
+						i++;}
+					if (isDown(board[i-1][j])) {
+						pipe = board[i-1][j];
+						cost++;
+						i--;}
+					;
+				case 's':
+					cost++;
+					break;
+				case 'g':
+					if (isUp(board[i+1][j])) {
+						pipe = board[i+1][j];
+						cost++;
+						i++;}
+					if (isDown(board[i-1][j])) {
+						pipe = board[i-1][j];
+						cost++;
+						i--;}
+					if (isLeft(board[i][j+1])) {
+						pipe = board[i][j+1];
+						cost++;
+						j++;}
+					if (isRight(board[i][j-1])) {
+						pipe = board[i][j-1];
+						cost++;
+						j--;}
+				default:
+					break;
+				}
+			}
+		return cost;
+		}		*/
 } 

@@ -20,9 +20,9 @@ public class BestFirstSearch<T> extends CommonSearcher<T> {
 					return backTrace(s.getInitialState(), n);
 		
 				ArrayList<State<T>> successors = s.getAllPossibleStates(n);
-				for(State<T> state: successors){
+ 				for(State<T> state: successors){
 					if(!closedSet.contains(state) && !openList.contains(state)){
-						state.setCameFrom(n);
+						//state.setCameFrom(n);
 						setDeterminedCost(state);
 						addToOpenList(state);
 						}
@@ -30,7 +30,7 @@ public class BestFirstSearch<T> extends CommonSearcher<T> {
 					if(state.getCost() < (n.getCost() + s.increaseCost())) {		
 						if(!openList.contains(state)){
 							setDeterminedCost(state);
-							state.setCameFrom(n);
+							//state.setCameFrom(n);
 							addToOpenList(state);
 						}
 						else {

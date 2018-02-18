@@ -1,13 +1,11 @@
 package server;
 
-import java.util.ArrayList;
 
 import algorithms.BestFirstSearch;
 import search.PipeGameSearchable;
 import search.Searchable;
 import search.Searcher;
 import search.State;
-import solve.PipeSolver;
 
 public class MainTrain {
 
@@ -34,14 +32,20 @@ public class MainTrain {
 //		//pgs.setAllPossibleStates(pgs.initialState);
 //		System.out.println(pgs.getAllPossibleStates(pgs.initialState));
 		
-		//char[][] board = {{'s','|',' '},{' ','-',' '},{' ','g',' '}};
-		char[][] board = {{'s','L'},{'7','g'}};
+		char[][] board = {{'s','J',' '},{' ','-','L'},{'-','g',' '}};
+		//char[][] board = {{'s','J',' ','-'},{' ','-','L','-'},{'-','g','-',' '},{'7','|','L','-'}};
+		//char[][] board = {{'s','L'},{'7','g'}};
 		State<char[][]> problem = new State<>(board);
 	//	problem.setState(board);
 		Searchable<char[][]> searchable = new PipeGameSearchable(problem);
 
 		Searcher<char[][]> searcher = new BestFirstSearch<>();
-		System.out.println(searcher.search(searchable).getSolution().toString());
+		for(State<char[][]> state : searcher.search(searchable).getSolution()) {
+			for(int i=0; i<state.getState().length; i++) {
+					System.out.print(state.getState()[i]);
+					System.out.println();
+				}
+			}
 		
 	}
 

@@ -12,8 +12,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
-import search.State;
-
 
 public class GameCacheManager implements CacheManager<String> {
 	
@@ -63,7 +61,6 @@ public class GameCacheManager implements CacheManager<String> {
 	public void saveSolution(String problem, Collection<String> solution) {
 		BufferedWriter writer = null;
 		PrintWriter pWriter = null;
-
 		String workingDirectory = System.getProperty("user.dir");
 		String fname = Integer.toString(problem.hashCode());
 		try
@@ -81,14 +78,12 @@ public class GameCacheManager implements CacheManager<String> {
 		    		break;
 		    }
 		    writer.close();
-		    pWriter.close();
-		    
+		    pWriter.close();   
 		}
 		catch (IOException e)
 		{
 			e.printStackTrace();
 		}
-		
 	}
 
 	@Override
