@@ -59,7 +59,7 @@ public class MainTrain {
 			startTime = System.nanoTime();
 			solutions.add(search.search(searchable).getSolution());
 			endTime = System.nanoTime() - startTime;
-			System.out.println("Time took " + search.getClass() + " = " + endTime);
+			System.out.println("Time took " + search.getClass() + " in millisec= " + endTime/1000);
 		}
 		for(ArrayList<State<char[][]>> solution : solutions) {
 			for (State<char[][]> state : solution)
