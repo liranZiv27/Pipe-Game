@@ -1,7 +1,8 @@
 package algorithms;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Stack;
-import java.util.Vector;
 
 import search.CommonSearcher;
 import search.Searchable;
@@ -12,46 +13,36 @@ public class DFS<T> extends CommonSearcher<T>{
 
 	@Override
 	public Solution<T> search(Searchable<T> s) {
-		// Initially mark all vertices as not visited
-        Vector<Boolean> visited = new Vector<Boolean>();
+        ArrayList<State<T>> visitedStates = new ArrayList<>();//create a visited state array list
         State<T> state = s.getInitialState();
-        for (int i = 0; i < V; i++)
-            visited.add(false);
- 
-        // Create a stack for DFS
-        Stack<State<T>> stack = new Stack<>();
+        Stack<State<T>> stack = new Stack<>();// Create a stack for DFS
+        stack.push(state); // Push the current source node
          
-        // Push the current source node
-        stack.push(s);
-         
-        while(stack.empty() == false)
+        while(!stack.isEmpty())
         {
-            // Pop a vertex from stack and print it
-            s = stack.peek();
-            stack.pop();
-             
-            // Stack may contain same vertex twice. So
-            // we need to print the popped item only
-            // if it is not visited.
-            if(visited.get(s) == false)
-            {
-                System.out.print(s + " ");
-                visited.set(s, true);
+            // Pop a state from stack and add it to the solution
+        	state = stack.pop();
+            if (s.isGoalState(state)) {
+            	return backTrace(s.getInitialState(), state);
+           } 
+           else {
+                // if it is not visited put it in visited 
+                 if (!visitedStates.contains(state))
+                	 visitedStates.add(state);
+                 //get all the popped state's neighbors
+                 Iterator<State<T>> itr = s.getAllPossibleStates(state).iterator();
+               
+                 while (itr.hasNext()) {
+                     state = itr.next();
+                     if(!visitedStates.contains(state))
+                         stack.push(state);
+                 }  	
             }
-             
-            // Get all adjacent vertices of the popped vertex s
-            // If a adjacent has not been visited, then puah it
-            // to the stack.
-            Iterator<Integer> itr = adj[s].iterator();
-             
-            while (itr.hasNext()) 
-            {
-                int v = itr.next();
-                if(!visited.get(v))
-                    stack.push(v);
-            }
-             
-        }	}
+          
+        }
+        return null;
+	}
+
 
 	@Override
 	protected void setDeterminedCost(State<T> s) {

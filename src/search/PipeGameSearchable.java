@@ -149,14 +149,14 @@ public class PipeGameSearchable implements Searchable<char[][]> {
 						{
 							this.hashStates.add(stateBuilder.toString());//put the stage into the state hash set
 							this.possibleStates.add(newState);
-							for(int q=0;q<newState.getState().length;q++)
+							/*for(int q=0;q<newState.getState().length;q++)
 							{
 								
 								System.out.print(newState.getState()[q]);
 								System.out.print(" ");
 
 							}
-							System.out.println();
+							System.out.println();*/
 						}
 						temp = copyState(newState);
 					}
