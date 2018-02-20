@@ -3,46 +3,55 @@ package server;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 
 public class SingleClientServer implements Server {
 	private int port;
-	private ClientHandler<?> ch;
-	@SuppressWarnings("unused")
-	private volatile boolean stop;
+	//@SuppressWarnings("unused")
+	protected volatile boolean stop;
 	
-	public SingleClientServer(int port, ClientHandler<?> ch) {
+	public SingleClientServer(int port) {
 		this.port = port;
-		this.ch = ch;
 		stop=false;
 	}
 	
 	@Override
-	public void start() throws Exception {
-		runServer();
+	public void start(ClientHandler ch) {
+		new Thread(()->{
+			try {
+				runServer(ch);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				//e.printStackTrace();
+			}
+		}).start();
 	}
 
-	private void runServer() throws Exception {
-		ServerSocket server;
-		try {
-			server = new ServerSocket(port);
-			server.setSoTimeout(3000);
-			Socket aClient = server.accept(); 
+	private void runServer(ClientHandler ch) throws Exception {
+	ServerSocket server=new ServerSocket(port);
+	server.setSoTimeout(1000);
+
+	while(!stop){ 
+
+		try{ 
+			Socket aClient=server.accept(); // blocking call try 
+			try {
+				ch.handleClient(aClient.getInputStream(), aClient.getOutputStream());
+				aClient.getInputStream().close();
+				aClient.getOutputStream().close();
+				aClient.close();
+			} catch (IOException e) {
+				//e.printStackTrace();
+			}
+		}
+		catch(SocketTimeoutException ste) {
 			
-			ch.handleClient(aClient.getInputStream(), aClient.getOutputStream());
-			
-		//	aClient.getInputStream().close();
-		//	aClient.getOutputStream().close();
-			aClient.close();
-			server.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 	}
-
+	server.close();
+}
 	@Override
 	public void stop() {
 		stop=true;
 	}
-
 }

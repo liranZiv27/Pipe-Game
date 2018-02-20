@@ -1,6 +1,6 @@
 package solve;
 
-public interface Solver<T,E> {
-	public Solution<T> solveProblem (E problem);
+public interface Solver<solutionType,ProblemType> {
+	public solutionType solveProblem (ProblemType problem);
 	
 }

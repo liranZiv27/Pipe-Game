@@ -1,8 +1,8 @@
 package search;
 
-import java.util.Comparator;
-import java.util.Iterator;
+import java.util.HashSet;
 import java.util.PriorityQueue;
+import java.util.Queue;
 
 import solve.Solution;
 
@@ -10,18 +10,14 @@ import solve.Solution;
 
 public abstract class CommonSearcher<T> implements Searcher<T>{
 	
-	protected PriorityQueue<State<T>> openList;
+	protected Queue<State<T>> openList;
 	private int evaluatedNodes;
+	protected HashSet<State<T>> closedSet = new HashSet<>();
 	
 	public CommonSearcher() {
-	openList=new PriorityQueue<State<T>>(new Comparator<State<T>>()	{
-		@Override
-		public int compare(State<T> s1, State<T> s2) {
-			return (int)((s1.getCost() - s2.getCost()));
-		}
-	});
-
+	this.openList = new PriorityQueue<State<T>>();
 	evaluatedNodes=0;
+	
 	}
 	
 	protected State<T> popOpenList() {
@@ -36,10 +32,13 @@ public abstract class CommonSearcher<T> implements Searcher<T>{
 	protected Solution<T> backTrace (State<T> initialState, State<T> goalState)
 	{
 		Solution<T> solution = new Solution<>();
-		State<T> temp = new State<T>(goalState);
-		while(!temp.equals(initialState)) {
-			solution.add(temp);
-			temp = temp.getCameFrom();
+		int i=0;
+	
+		
+		while(!(goalState.equals(initialState))) {
+			//System.out.println("backtrace counter: "+ i++);
+			solution.add(goalState);
+			goalState = goalState.getCameFrom();
 		}
 		solution.add(initialState);
 		return solution;
@@ -47,29 +46,9 @@ public abstract class CommonSearcher<T> implements Searcher<T>{
 	
 	
 	@Override
-	public abstract Solution<T> search(Searchable<T> s);
-	
-	@Override
 	public int getNumberOfNodesEvaluated() {
 	return evaluatedNodes;
 	}
 
-	protected abstract void setDeterminedCost(State<T> s);
-	
-	protected void adjustPriority(PriorityQueue<State<T>> openList, State<T> state) {
-		Iterator<State<T>> itr = openList.iterator();
-		State<T> checkedState = null;
-		
-		while(itr.hasNext()){
-			checkedState = itr.next();
-			if(checkedState.getState().equals(state.getState()))
-			{
-				openList.remove(checkedState);
-				setDeterminedCost(checkedState);
-				openList.add(checkedState);
-				return;
-			}
-			
-		}
-	}
+
 }
