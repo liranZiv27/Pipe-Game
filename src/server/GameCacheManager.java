@@ -58,16 +58,18 @@ public class GameCacheManager implements CacheManager<String> {
    }
 
 	@Override
-	public void saveSolution(String problem, Collection<String> solution) {
+	public void saveSolution(String problem, Collection<String> solution, int rows, int cols) {
 		BufferedWriter writer = null;
 		PrintWriter pWriter = null;
 		String workingDirectory = System.getProperty("user.dir");
 		String fname = Integer.toString(problem.hashCode());
+		ArrayList<String> steps = new ArrayList<>();
 		try
 		{
 		    writer = new BufferedWriter(new FileWriter(fname));
 		    pWriter = new PrintWriter(workingDirectory + "\\src\\server\\" + fname +".txt");
-		    for (String s : solution)
+		    steps = parseToSteps(solution.toArray()[solution.size()-1].toString(), solution.toArray()[0].toString(), rows, cols);
+		    for (String s : steps)
 		    {
 		    	if(!s.equals("done")) {
 		    	//	writer.write(s);
@@ -91,21 +93,55 @@ public class GameCacheManager implements CacheManager<String> {
 		int hash = problem.hashCode();
 		if (cache.containsKey(hash)) {
 			return cache.get(hash);
+		}		
+		 else
+		{
+			if (this.loadSolution(problem))
+				return cache.get(hash);
 		}
-		
-		// load
-//		else
-//		{
-//			if (this.loadSolution(problem))
-//				return cache.get(hash);
-//		}
-		
-		// save 
-		ArrayList<String> soulion = new ArrayList<>();
-		soulion.add("1,2,3");
-		soulion.add("1,2,3");
-		soulion.add("1,2,3");
-		saveSolution(problem, soulion);
 		return null;
+	}
+
+	public ArrayList<String> parseToSteps (String initialState, String goalState, int rows, int cols){
+		int moves = 0, index=0;
+		String pipes = "JLF7";
+		StringBuilder steps = new StringBuilder();
+		ArrayList<String> solution = new ArrayList<String>();
+		initialState = initialState.substring(1, initialState.length()-1);
+		goalState = goalState .substring(1, goalState .length()-1);
+		initialState = initialState.replaceAll(", ", "");
+		goalState = goalState.replaceAll(", ", "");
+		for (int i=0; i<rows; i++) {
+			for(int j=0; j<cols; j++) {
+				if(pipes.indexOf(initialState.charAt(index)) != -1){
+				moves = (pipes.indexOf(goalState.charAt(index))+1) - (pipes.indexOf(initialState.charAt(index))+1);
+				if (moves > 0) {
+					steps.append(i + "," + j + "," + moves);
+					solution.add(steps.toString());
+					steps = new StringBuilder();
+				}
+				else if (moves < 0) {
+					moves+=4;
+					steps.append(i + "," + j + "," + moves);
+					solution.add(steps.toString());
+					steps = new StringBuilder();
+				}
+			}
+				else if(initialState.charAt(index) != 's' && initialState.charAt(index) != 'g' && initialState.charAt(index) != ' '){
+					if (initialState.charAt(index) != goalState.charAt(index)) {
+						steps.append(i + "," + j + "," + "1");
+						solution.add(steps.toString());
+						steps = new StringBuilder();
+					}
+				}
+				moves = 0;
+				index++;
+			}
 		}
+		return solution;
+	}
+
 }
+
+
+

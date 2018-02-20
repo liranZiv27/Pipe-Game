@@ -2,13 +2,14 @@ package algorithms;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+
 import search.CommonSearcher;
 import search.Searchable;
 import search.State;
 import solve.Solution;
 
 public class BestFirstSearch<T> extends CommonSearcher<T> { 
-
+	
 	@Override
 	public Solution<T> search(Searchable<T> s) {
 			addToOpenList(s.getInitialState());
@@ -22,7 +23,6 @@ public class BestFirstSearch<T> extends CommonSearcher<T> {
 				ArrayList<State<T>> successors = s.getAllPossibleStates(n);
  				for(State<T> state: successors){
 					if(!closedSet.contains(state) && !openList.contains(state)){
-						//state.setCameFrom(n);
 						setDeterminedCost(state);
 						addToOpenList(state);
 						}
@@ -30,7 +30,6 @@ public class BestFirstSearch<T> extends CommonSearcher<T> {
 					if(state.getCost() < (n.getCost() + s.increaseCost())) {		
 						if(!openList.contains(state)){
 							setDeterminedCost(state);
-							//state.setCameFrom(n);
 							addToOpenList(state);
 						}
 						else {

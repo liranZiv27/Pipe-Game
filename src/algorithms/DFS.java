@@ -1,6 +1,6 @@
 package algorithms;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Stack;
 
@@ -13,12 +13,13 @@ public class DFS<T> extends CommonSearcher<T>{
 
 	@Override
 	public Solution<T> search(Searchable<T> s) {
-        ArrayList<State<T>> visitedStates = new ArrayList<>();//create a visited state array list
+        HashSet<State<T>> visitedStates = new HashSet<>();//create a visited state array list
         State<T> state = s.getInitialState();
         Stack<State<T>> stack = new Stack<>();// Create a stack for DFS
+        
         stack.push(state); // Push the current source node
          
-        while(!stack.isEmpty())
+        while(!stack.isEmpty()) 
         {
             // Pop a state from stack and add it to the solution
         	state = stack.pop();

@@ -2,27 +2,34 @@ package solve;
 
 import java.util.ArrayList;
 
+import algorithms.BFS;
+import algorithms.DFS;
 import search.CommonSearcher;
 import search.PipeGameSearchable;
+import search.PipeParser;
 import search.Searchable;
-import search.Searcher;
 import search.State;
 
-public class PipeSolver implements Solver<char[][],ArrayList<String>> {
+public class PipeSolver implements Solver<char[][],State<ArrayList<String>>> {
 
-	@Override
-	public Solution<char[][]> solveProblem(ArrayList<String> problem) {
-		return null;
-		
+	private PipeParser parser;
+	private CommonSearcher<char[][]> searcher;
+	public PipeSolver() {
+		this.parser = new PipeParser();
 	}
 
-//	@Override
-//	public Solution<char[][]> solveProblem(ArrayList<String> problem) {
-//		State<ArrayList<String>> state = new State<>(problem);
-//		Searchable pipeGameBoard = new PipeGameSearchable(state);
-//		//Searcher searcher = new CommonSearcher();//create a new instance of an algorithm
-//		return searcher.search(pipeGameBoard);
-// 
-//	}
+	@Override
+	public Solution<char[][]> solveProblem(State<ArrayList<String>> problem) {
+		State<char[][]> stateProblem = new State<>(parser.parse(problem));
+		Searchable<char[][]> pipeGameBoard = new PipeGameSearchable(stateProblem);
+		ArrayList<State<char[][]>> solution = new ArrayList<State<char[][]>>();
+		searcher = new DFS<char[][]>();
+		solution = searcher.search(pipeGameBoard).getSolution();
+		Solution<char[][]> res = new Solution<>();
+		res.setSolution(solution);
+		return res;
+	}
+	
+
 
 }

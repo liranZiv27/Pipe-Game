@@ -118,7 +118,6 @@ public class PipeGameSearchable implements Searchable<char[][]> {
 
 	}
 
-
 	@Override
 	public void setAllPossibleStates(State<char[][]> s) {
 		State<char [][]> newState = new State<char[][]>();

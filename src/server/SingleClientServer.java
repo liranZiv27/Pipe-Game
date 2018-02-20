@@ -7,6 +7,7 @@ import java.net.Socket;
 public class SingleClientServer implements Server {
 	private int port;
 	private ClientHandler<?> ch;
+	@SuppressWarnings("unused")
 	private volatile boolean stop;
 	
 	public SingleClientServer(int port, ClientHandler<?> ch) {
